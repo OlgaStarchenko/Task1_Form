@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./app.module.css";
 
 export function App() {
@@ -24,6 +24,14 @@ export function App() {
     errors.password === "" &&
     errors.repeatPassword === "";
 
+  const submitRef = useRef(null);
+
+  useEffect(() => {
+    if (isValid) {
+      submitRef.current.focus();
+    }
+  });
+
   const handleChange = ({ target }) => {
     const { name, value } = target;
 
@@ -48,12 +56,16 @@ export function App() {
 
     if (newFormData.password === "") {
       newErrors.password = "Введите пароль";
+    } else if (newFormData.password.length > 20) {
+      newErrors.password = "Пароль должен быть не более 20 символов";
     } else {
       newErrors.password = "";
     }
 
     if (newFormData.repeatPassword === "") {
       newErrors.repeatPassword = "Повторите пароль";
+    } else if (newFormData.repeatPassword !== newFormData.password) {
+      newErrors.repeatPassword = "Пароли должны совпадать";
     } else {
       newErrors.repeatPassword = "";
     }
@@ -68,15 +80,6 @@ export function App() {
         ...prev,
         password: "Пароль должен быть не менее 6 символов",
       }));
-    }
-
-    if (repeatPassword !== password) {
-      setErrors((prev) => ({
-        ...prev,
-        repeatPassword: "Пароли должны совпадать",
-      }));
-    } else {
-      setErrors((prev) => ({ ...prev, repeatPassword: "" }));
     }
   };
 
@@ -132,6 +135,7 @@ export function App() {
           className={styles.validationForm__btn}
           type="submit"
           disabled={!isValid}
+          ref={submitRef}
         >
           Зарегистрироваться
         </button>
