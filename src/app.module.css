@@ -29,6 +29,10 @@
   font-weight: bold;
   background-color: rgb(225, 224, 222);
 }
+.validationForm__btn:disabled {
+  color: rgb(163, 163, 171);
+  border: 1px solid rgb(163, 163, 171);
+}
 .errorLabel {
   color: red;
 }
